@@ -1,17 +1,9 @@
 import sys
 
 from PySide6.QtCore import QCoreApplication, QTimer
-from PySide6.QtWidgets import QMainWindow, QApplication, QGridLayout, QWidget
+from PySide6.QtWidgets import QMainWindow, QApplication
 from qt_material import QtStyleTools
 
-
-class MainWidget(QWidget):
-
-    def __init__(self):
-        super().__init__()
-        self.grid_layout = QGridLayout(self)
-        self.grid_layout.setContentsMargins(0, 0, 0, 0)
-        self.setLayout(self.grid_layout)
 
 
 class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
@@ -37,6 +29,7 @@ class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
         sys.exit(0)
 
     def startup_setting(self) -> None:
+        self.apply_stylesheet(self, "dark_amber.xml")
         self.showMaximized()
 
 
