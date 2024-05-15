@@ -6,6 +6,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QWidget, QGridLayout, QFileSystemModel, QTreeView, QScrollArea, QLabel, QBoxLayout, \
     QSplitter, QListWidget, QListWidgetItem
 
+from soil_and_dust_editor.scene.edit_map_scene import ExtendMapScene
 from soil_and_dust_editor.scene.extend_graphic_view import ExtendGraphicView
 
 
@@ -17,6 +18,8 @@ class MainWidget(QWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
         # Graphics view
         self.graphics_view = ExtendGraphicView()
+        self.edit_map_scene = ExtendMapScene()
+        self.graphics_view.setScene(self.edit_map_scene)
         # Treeview
         self.project_treeview_model = QFileSystemModel()
         self.project_treeview_model.setRootPath(QDir.currentPath())

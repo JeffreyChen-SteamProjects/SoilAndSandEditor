@@ -12,7 +12,7 @@ class ExtendGraphicView(QGraphicsView):
         self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
 
     def wheelEvent(self, event) -> None:
-        if len(self.scene().items()) == 0:
+        if self.scene() and len(self.scene().items()) == 0:
             pass
         else:
             current_position = event.position()
