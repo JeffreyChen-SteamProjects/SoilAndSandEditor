@@ -4,6 +4,7 @@ from PySide6.QtCore import QCoreApplication, QTimer
 from PySide6.QtWidgets import QMainWindow, QApplication
 from qt_material import QtStyleTools
 
+from soil_and_dust_editor.ui.main_widget import MainWidget
 
 
 class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):

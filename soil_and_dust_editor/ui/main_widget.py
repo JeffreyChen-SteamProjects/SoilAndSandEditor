@@ -54,6 +54,7 @@ class MainWidget(QWidget):
         self.tile_list_widget.addItem(QListWidgetItem(self.soil_floor_1_pixmap, ""))
         self.tile_list_widget.addItem(QListWidgetItem(self.grass_1_pixmap, ""))
         self.tile_list_widget.addItem(QListWidgetItem(self.soil_with_stone_1_pixmap, ""))
+        self.tile_list_widget.itemClicked.connect(self.tile_list_widget_click)
         self.tile_splitter = QSplitter()
         self.tile_splitter.setOrientation(Qt.Orientation.Vertical)
         self.tile_splitter.addWidget(self.tile_widget)
@@ -75,3 +76,6 @@ class MainWidget(QWidget):
         path = pathlib.Path(file_info.absoluteFilePath())
         if path.is_file():
             pass
+
+    def tile_list_widget_click(self, clicked_item: QListWidgetItem) -> None:
+        print(clicked_item.icon())
