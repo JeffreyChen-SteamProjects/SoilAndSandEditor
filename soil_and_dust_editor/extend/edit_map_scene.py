@@ -1,8 +1,10 @@
-from typing import Union
+from typing import Union, List
 
 from PySide6.QtCore import QRect, QPointF
 from PySide6.QtGui import QPen, Qt, QPixmap
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
+
+from soil_and_dust_editor.static.map_static import map_structure
 
 
 def build_block_structure(x_position: int, y_position: int, block_count: int, grid_size: int) -> dict:
@@ -12,8 +14,9 @@ def build_block_structure(x_position: int, y_position: int, block_count: int, gr
             "top": y_position,
             "height": grid_size,
             "width": grid_size,
-            "pixmap": None,
-            "pixmap_item": None
+            "pixmaps": [],
+            "pixmap_items": [],
+            "collision": False,
         }
     }
 
@@ -32,30 +35,29 @@ def detect_block(block_structure: dict, click_position: QPointF) -> Union[None, 
 
 class ExtendMapScene(QGraphicsScene):
 
-    def __init__(self, grid_max_size_x: int = 500, grid_max_size_y: int = 500, grid_size: int = 20,
+    def __init__(self, grid_max_size_x: int = 500, grid_max_size_y: int = 500, block_size: int = 20,
                  default_pixmap: QPixmap = None):
         super().__init__()
         x_count = -1
         y_count = -1
         # grid_max_size x & y should be equal
-        for x in range(0, grid_max_size_x + 1, grid_size):
+        for x in range(0, grid_max_size_x + 1, block_size):
             self.addLine(x, 0, x, grid_max_size_x - 1, QPen(Qt.GlobalColor.white))
             x_count += 1
-        for y in range(0, grid_max_size_y + 1, grid_size):
+        for y in range(0, grid_max_size_y + 1, block_size):
             if y <= grid_max_size_y:
                 self.addLine(0, y, grid_max_size_y - 1, y, QPen(Qt.GlobalColor.white))
                 y_count += 1
-        self.block_structure = {}
         block_count = 0
         block_x_position = 0
         block_y_position = 0
         for row in range(0, y_count, 1):
             for column in range(0, x_count, 1):
-                self.block_structure.update(build_block_structure(
-                    block_x_position, block_y_position, block_count, grid_size))
-                block_x_position += grid_size
+                map_structure.update(build_block_structure(
+                    block_x_position, block_y_position, block_count, block_size))
+                block_x_position += block_size
                 block_count += 1
-            block_y_position += grid_size
+            block_y_position += block_size
             block_x_position = 0
         self.current_pixmap = default_pixmap
 
@@ -67,14 +69,12 @@ class ExtendMapScene(QGraphicsScene):
             if x < 0 or y < 0:
                 pass
             else:
-                trigger_block = detect_block(self.block_structure, click_position)
+                trigger_block = detect_block(map_structure, click_position)
                 if trigger_block:
-                    block: dict = self.block_structure.get(trigger_block)
-                    if block.get("pixmap_item") is not None:
-                        self.removeItem(block.get("pixmap_item"))
+                    block: dict = map_structure.get(trigger_block)
                     pixmap_item: QGraphicsPixmapItem = self.addPixmap(self.current_pixmap)
-                    block.update({"pixmap": self.current_pixmap})
-                    block.update({"pixmap_item": pixmap_item})
+                    block.get("pixmaps").append(self.current_pixmap)
+                    block.get("pixmap_items").append(pixmap_item)
                     pixmap_item.setX(block.get("left"))
                     pixmap_item.setY(block.get("top"))
         super().mousePressEvent(event)
@@ -87,11 +87,15 @@ class ExtendMapScene(QGraphicsScene):
             if x < 0 or y < 0:
                 pass
             else:
-                trigger_block = detect_block(self.block_structure, click_position)
+                trigger_block = detect_block(map_structure, click_position)
                 if trigger_block:
-                    block: dict = self.block_structure.get(trigger_block)
-                    if block.get("pixmap_item") is not None:
-                        self.removeItem(block.get("pixmap_item"))
-                        block.update({"pixmap": None})
-                        block.update({"pixmap_item": None})
+                    block: dict = map_structure.get(trigger_block)
+                    items: List[QGraphicsPixmapItem] = block.get("pixmap_items")
+                    pixmaps: List[QPixmap] = block.get("pixmaps")
+                    if len(items) > 0:
+                        self.removeItem(items[-1])
+                        items.pop()
+                        pixmaps.pop()
+                    block.update({"pixmap_items": items})
+                    block.update({"pixmaps": pixmaps})
         super().mousePressEvent(event)

@@ -1,0 +1,3 @@
+pixmaps_static = {
+
+}
