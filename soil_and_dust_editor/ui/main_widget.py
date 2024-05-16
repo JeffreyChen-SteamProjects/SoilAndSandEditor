@@ -1,7 +1,7 @@
 import pathlib
 from pathlib import Path
 
-from PySide6.QtCore import QDir, Qt, QFileInfo
+from PySide6.QtCore import QDir, Qt, QFileInfo, QSize
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QWidget, QGridLayout, QFileSystemModel, QTreeView, QScrollArea, QLabel, QBoxLayout, \
     QSplitter, QListWidget, QListWidgetItem
@@ -50,9 +50,10 @@ class MainWidget(QWidget):
         self.tile_list_widget = QListWidget()
         self.tile_list_widget.setViewMode(QListWidget.ViewMode.IconMode)
         self.tile_list_widget.setResizeMode(QListWidget.ResizeMode.Adjust)
-        self.tile_list_widget.addItem(QListWidgetItem(self.soil_floor_1_pixmap, "soil_floor_1.png"))
-        self.tile_list_widget.addItem(QListWidgetItem(self.grass_1_pixmap, "grass_1.png"))
-        self.tile_list_widget.addItem(QListWidgetItem(self.soil_with_stone_1_pixmap, "soil_with_stone_1.png"))
+        self.tile_list_widget.setItemAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tile_list_widget.addItem(QListWidgetItem(self.soil_floor_1_pixmap, ""))
+        self.tile_list_widget.addItem(QListWidgetItem(self.grass_1_pixmap, ""))
+        self.tile_list_widget.addItem(QListWidgetItem(self.soil_with_stone_1_pixmap, ""))
         self.tile_list_widget.itemClicked.connect(self.tile_list_widget_click)
         self.tile_splitter = QSplitter()
         self.tile_splitter.setOrientation(Qt.Orientation.Vertical)
@@ -82,4 +83,4 @@ class MainWidget(QWidget):
             pass
 
     def tile_list_widget_click(self, clicked_item: QListWidgetItem) -> None:
-        print(clicked_item.icon())
+        self.edit_map_scene.current_pixmap = clicked_item.icon().pixmap(QSize(20, 20))

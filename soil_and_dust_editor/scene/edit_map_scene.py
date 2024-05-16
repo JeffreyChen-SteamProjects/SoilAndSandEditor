@@ -1,4 +1,6 @@
-from PySide6.QtCore import QRect
+from typing import Union
+
+from PySide6.QtCore import QRect, QPointF
 from PySide6.QtGui import QPen, Qt, QPixmap
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
 
@@ -10,9 +12,22 @@ def build_block_structure(x_position: int, y_position: int, block_count: int, gr
             "top": y_position,
             "height": grid_size,
             "width": grid_size,
-            "pixmap": None
+            "pixmap": None,
+            "pixmap_item": None
         }
     }
+
+
+def detect_block(block_structure: dict, click_position: QPointF) -> Union[None, str]:
+    trigger_block = None
+    for block_name, block_detail in block_structure.items():
+        check_rect = QRect(
+            block_detail.get("left"), block_detail.get("top"),
+            block_detail.get("width"), block_detail.get("height"))
+        if check_rect.contains(click_position.toPoint()):
+            trigger_block = block_name
+            break
+    return trigger_block
 
 
 class ExtendMapScene(QGraphicsScene):
@@ -42,7 +57,6 @@ class ExtendMapScene(QGraphicsScene):
                 block_count += 1
             block_y_position += grid_size
             block_x_position = 0
-        print(self.block_structure)
         self.current_pixmap = default_pixmap
 
     def mousePressEvent(self, event):
@@ -53,18 +67,31 @@ class ExtendMapScene(QGraphicsScene):
             if x < 0 or y < 0:
                 pass
             else:
-                trigger_block = None
-                for block_name, block_detail in self.block_structure.items():
-                    check_rect = QRect(
-                        block_detail.get("left"), block_detail.get("top"),
-                        block_detail.get("width"), block_detail.get("height"))
-                    if check_rect.contains(click_position.toPoint()):
-                        trigger_block = block_name
-                        break
+                trigger_block = detect_block(self.block_structure, click_position)
                 if trigger_block:
                     block: dict = self.block_structure.get(trigger_block)
+                    if block.get("pixmap_item") is not None:
+                        self.removeItem(block.get("pixmap_item"))
                     pixmap_item: QGraphicsPixmapItem = self.addPixmap(self.current_pixmap)
                     block.update({"pixmap": self.current_pixmap})
+                    block.update({"pixmap_item": pixmap_item})
                     pixmap_item.setX(block.get("left"))
                     pixmap_item.setY(block.get("top"))
+        super().mousePressEvent(event)
+
+    def mouseDoubleClickEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            click_position = event.scenePos()
+            x = click_position.x()
+            y = click_position.y()
+            if x < 0 or y < 0:
+                pass
+            else:
+                trigger_block = detect_block(self.block_structure, click_position)
+                if trigger_block:
+                    block: dict = self.block_structure.get(trigger_block)
+                    if block.get("pixmap_item") is not None:
+                        self.removeItem(block.get("pixmap_item"))
+                        block.update({"pixmap": None})
+                        block.update({"pixmap_item": None})
         super().mousePressEvent(event)
