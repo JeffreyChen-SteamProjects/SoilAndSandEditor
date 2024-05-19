@@ -10,7 +10,7 @@ from PySide6.QtWidgets import QWidget, QGridLayout, QFileSystemModel, QTreeView,
 from soil_and_dust_editor.extend.edit_map_scene import ExtendMapScene
 from soil_and_dust_editor.extend.extend_graphic_view import ExtendGraphicView
 from soil_and_dust_editor.extend.extend_list_widget import ExtendListWidgetItem
-from soil_and_dust_editor.static.pixmap_static import pixmaps_static
+from soil_and_dust_editor.class_and_static.pixmap import pixmaps_static
 
 
 def load_floor_pixmaps(tile_list_widget: QListWidget):
@@ -19,7 +19,7 @@ def load_floor_pixmaps(tile_list_widget: QListWidget):
         pixmap = QPixmap(png)
         pixmap = pixmap.scaled(64, 64, Qt.AspectRatioMode.KeepAspectRatio)
         png_path = Path(png)
-        png_name = png_path.stem
+        png_name = png_path.name
         list_item = ExtendListWidgetItem(pixmap, "")
         list_item.png_name = png_name
         tile_list_widget.addItem(list_item)
@@ -73,7 +73,8 @@ class MainWidget(QWidget):
         # Graphics view
         self.normal_size_soil_floor_1_pixmap = QPixmap("assets/tiles/soil_floor_1.png")
         self.graphics_view = ExtendGraphicView()
-        self.edit_map_scene = ExtendMapScene(default_pixmap=self.normal_size_soil_floor_1_pixmap)
+        self.edit_map_scene = ExtendMapScene(
+            default_pixmap=self.normal_size_soil_floor_1_pixmap, default_name="soil_floor_1")
         self.graphics_view.setScene(self.edit_map_scene)
         # Add to ui
         self.full_splitter = QSplitter(self)
@@ -96,3 +97,4 @@ class MainWidget(QWidget):
         self.tile_name_label.setText(clicked_item.png_name)
         self.tile_pixmap_label.setPixmap(pixmaps_static.get(clicked_item.png_name))
         self.edit_map_scene.current_pixmap = clicked_item.icon().pixmap(QSize(20, 20))
+        self.edit_map_scene.current_pixmap_name = clicked_item.png_name

@@ -1,10 +1,10 @@
-from typing import Union, List
+from typing import Union, List, Dict
 
 from PySide6.QtCore import QRect, QPointF
 from PySide6.QtGui import QPen, Qt, QPixmap
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
 
-from soil_and_dust_editor.static.map_static import map_structure
+from soil_and_dust_editor.class_and_static.map import map_structure
 
 
 def build_block_structure(x_position: int, y_position: int, block_count: int, grid_size: int) -> dict:
@@ -14,9 +14,8 @@ def build_block_structure(x_position: int, y_position: int, block_count: int, gr
             "top": y_position,
             "height": grid_size,
             "width": grid_size,
-            "pixmaps": [],
+            "tiles": {},
             "pixmap_items": [],
-            "collision": False,
         }
     }
 
@@ -36,7 +35,7 @@ def detect_block(block_structure: dict, click_position: QPointF) -> Union[None, 
 class ExtendMapScene(QGraphicsScene):
 
     def __init__(self, grid_max_size_x: int = 500, grid_max_size_y: int = 500, block_size: int = 20,
-                 default_pixmap: QPixmap = None):
+                 default_pixmap: QPixmap = None, default_name: str = None):
         super().__init__()
         x_count = -1
         y_count = -1
@@ -60,6 +59,7 @@ class ExtendMapScene(QGraphicsScene):
             block_y_position += block_size
             block_x_position = 0
         self.current_pixmap = default_pixmap
+        self.current_pixmap_name = default_name
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.RightButton:
@@ -73,7 +73,15 @@ class ExtendMapScene(QGraphicsScene):
                 if trigger_block:
                     block: dict = map_structure.get(trigger_block)
                     pixmap_item: QGraphicsPixmapItem = self.addPixmap(self.current_pixmap)
-                    block.get("pixmaps").append(self.current_pixmap)
+                    tiles = block.get("tiles")
+                    layer_count = len(tiles)
+                    tile = {
+                        "pixmap": self.current_pixmap,
+                        "pixmap_name": "",
+                        "layer": layer_count,
+                        "collision": False
+                    }
+                    tiles.update({f"tile_{layer_count}": tile})
                     block.get("pixmap_items").append(pixmap_item)
                     pixmap_item.setX(block.get("left"))
                     pixmap_item.setY(block.get("top"))
@@ -91,11 +99,11 @@ class ExtendMapScene(QGraphicsScene):
                 if trigger_block:
                     block: dict = map_structure.get(trigger_block)
                     items: List[QGraphicsPixmapItem] = block.get("pixmap_items")
-                    pixmaps: List[QPixmap] = block.get("pixmaps")
+                    tiles: Dict[str, dict] = block.get("tiles")
                     if len(items) > 0:
                         self.removeItem(items[-1])
                         items.pop()
-                        pixmaps.pop()
+                        tiles.popitem()
                     block.update({"pixmap_items": items})
-                    block.update({"pixmaps": pixmaps})
+                    block.update({"tiles": tiles})
         super().mousePressEvent(event)
