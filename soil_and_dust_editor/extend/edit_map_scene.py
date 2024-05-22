@@ -77,7 +77,7 @@ class ExtendMapScene(QGraphicsScene):
                     layer_count = len(tiles)
                     tile = {
                         "pixmap": self.current_pixmap,
-                        "pixmap_name": "",
+                        "pixmap_name": self.current_pixmap_name,
                         "layer": layer_count,
                         "collision": False
                     }
