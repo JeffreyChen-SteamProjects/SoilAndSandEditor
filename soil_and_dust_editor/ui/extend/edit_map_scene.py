@@ -75,6 +75,8 @@ class ExtendMapScene(QGraphicsScene):
                 block_x_position = 0
 
     def remove_all_grid_items(self):
+        for line in self.line_item:
+            self.removeItem(line)
         self.line_item.clear()
 
     def mousePressEvent(self, event):

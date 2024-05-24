@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QMainWindow, QApplication
 from qt_material import QtStyleTools
 
 from soil_and_dust_editor.ui.main_widget import MainWidget
+from soil_and_dust_editor.ui.menubar.menu_bar_builder import set_menu_bar
 
 
 class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
@@ -15,6 +16,7 @@ class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
         self.central_widget = MainWidget()
         self.map_edit_scene = self.central_widget.edit_map_scene
         self.setCentralWidget(self.central_widget)
+        set_menu_bar(self)
 
         if debug:
             self.debug_timer = QTimer()
