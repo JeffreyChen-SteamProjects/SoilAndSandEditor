@@ -32,8 +32,4 @@ class ExtendGraphicView(QGraphicsView):
             else:
                 self.scale(1.0 / 1.2, 1.0 / 1.2)
 
-            view_point = self.transform().map(scene_position)
-            self.horizontalScrollBar().setValue(int(view_point.x() - view_width * horizon_scale))
-            self.verticalScrollBar().setValue(int(view_point.y() - view_height * vertical_scale))
-
             self.update()

@@ -1,5 +1,5 @@
-from soil_and_dust.utils.multi_language.english import english_word_dict
-from soil_and_dust.utils.multi_language.traditional_chinese import traditional_chinese_word_dict
+from soil_and_dust_editor.utils.multi_language.english import english_word_dict
+from soil_and_dust_editor.utils.multi_language.traditional_chinese import traditional_chinese_word_dict
 
 
 class LanguageWrapper(object):
