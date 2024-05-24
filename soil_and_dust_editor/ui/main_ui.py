@@ -12,9 +12,11 @@ class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
 
     def __init__(self, debug: bool = False):
         super().__init__()
+        self.new_file_dialog = None
         self.setWindowTitle("SoilAndDust")
         self.central_widget = MainWidget()
         self.map_edit_scene = self.central_widget.edit_map_scene
+        self.graphics_view = self.central_widget.graphics_view
         self.setCentralWidget(self.central_widget)
         set_menu_bar(self)
 
