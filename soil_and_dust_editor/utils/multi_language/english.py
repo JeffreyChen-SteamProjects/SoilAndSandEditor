@@ -10,4 +10,5 @@ english_word_dict = {
     "grid_menu_open_grid": "Open gird",
     # File menu
     "file_menu_label": "File menu",
+    "file_menu_save_file": "Save file",
 }

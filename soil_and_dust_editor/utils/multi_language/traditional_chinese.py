@@ -10,4 +10,5 @@ traditional_chinese_word_dict = {
     "grid_menu_open_grid": "開啟格線",
     # File menu
     "file_menu_label": "檔案選單",
+    "file_menu_save_file": "儲存檔案",
 }
