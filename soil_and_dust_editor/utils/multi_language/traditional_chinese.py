@@ -22,4 +22,5 @@ traditional_chinese_word_dict = {
     "new_file_dialog_waring_tile": "警告",
     "new_file_dialog_waring_input_value": "請輸入正確數值",
     "new_file_dialog_waring_x_not_equal_y": "x 不等於 y",
+    "new_file_dialog_waring_block_size_greater_than_xy": "區塊大小大於 x或y",
 }

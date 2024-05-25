@@ -24,19 +24,20 @@ def build_block_structure(x_position: int, y_position: int, block_count: int, gr
 def detect_block(block_structure: dict, click_position: QPointF) -> Union[None, str]:
     trigger_block = None
     for block_name, block_detail in block_structure.items():
-        check_rect = QRect(
-            block_detail.get("x"), block_detail.get("y"),
-            block_detail.get("width"), block_detail.get("height"))
-        if check_rect.contains(click_position.toPoint()):
-            trigger_block = block_name
-            break
+        if block_name not in ["grid_x", "grid_y", "block_size"]:
+            check_rect = QRect(
+                block_detail.get("x"), block_detail.get("y"),
+                block_detail.get("width"), block_detail.get("height"))
+            if check_rect.contains(click_position.toPoint()):
+                trigger_block = block_name
+                break
     return trigger_block
 
 
 class ExtendMapScene(QGraphicsScene):
 
     def __init__(self, grid_max_size_x: int = 12000, grid_max_size_y: int = 12000, block_size: int = 60,
-                 default_pixmap: QPixmap = None, default_name: str = None):
+                 default_pixmap: QPixmap = None, default_name: str = None, read_map: bool = False):
         super().__init__()
         self.block_size = block_size
         self.grid_max_size_x = grid_max_size_x
@@ -46,7 +47,26 @@ class ExtendMapScene(QGraphicsScene):
         self.current_pixmap = default_pixmap
         self.current_pixmap_name = default_name
         self.line_item = []
+        self.read_map = read_map
+        map_structure.update({
+            "grid_x": grid_max_size_x,
+            "grid_y": grid_max_size_y,
+            "block_size": block_size,
+        })
         self.draw_gird_line()
+
+    def update_map_structure(self, x_count: int, y_count: int):
+        block_count = 0
+        block_x_position = 0
+        block_y_position = 0
+        for row in range(0, y_count, 1):
+            for column in range(0, x_count, 1):
+                map_structure.update(build_block_structure(
+                    block_x_position, block_y_position, block_count, self.block_size))
+                block_x_position += self.block_size
+                block_count += 1
+            block_y_position += self.block_size
+            block_x_position = 0
 
     def draw_gird_line(self):
         if len(self.line_item) == 0:
@@ -62,22 +82,40 @@ class ExtendMapScene(QGraphicsScene):
                     line_item = self.addLine(0, y, self.grid_max_size_y - 1, y, QPen(Qt.GlobalColor.white))
                     self.line_item.append(line_item)
                     y_count += 1
-            block_count = 0
-            block_x_position = 0
-            block_y_position = 0
-            for row in range(0, y_count, 1):
-                for column in range(0, x_count, 1):
-                    map_structure.update(build_block_structure(
-                        block_x_position, block_y_position, block_count, self.block_size))
-                    block_x_position += self.block_size
-                    block_count += 1
-                block_y_position += self.block_size
-                block_x_position = 0
+            if not self.read_map:
+                self.update_map_structure(x_count, y_count)
 
     def remove_all_grid_items(self):
         for line in self.line_item:
             self.removeItem(line)
         self.line_item.clear()
+
+    def read_map_file(self):
+        for block_name, block_detail in map_structure.items():
+            if block_name not in ["grid_x", "grid_y", "block_size"]:
+                x = block_detail.get("x")
+                y = block_detail.get("y")
+                tiles: dict = block_detail.get("tiles")
+                block_detail.update({"pixmap_items": []})
+                for tile_name, tile_detail in tiles.items():
+                    pixmap_setting = pixmaps_static.get(tile_detail.get("pixmap_name"))
+                    pixmap_type = pixmap_setting.get("pixmap_type")
+                    pixmap: QPixmap = pixmap_setting.get("pixmap")
+                    pixmap_item = self.addPixmap(pixmap)
+                    if pixmap_type == "floor":
+                        pixmap_item.setX(x)
+                        pixmap_item.setY(y)
+                    elif pixmap_type == "collision":
+                        pixmap_item.setX(x)
+                        pixmap_item.setY(y)
+                        tile_detail.update({"collision": True})
+                    else:
+                        pixmap_item.setX(x)
+                        if pixmap.height() > self.block_size:
+                            pixmap_item.setY((y - pixmap.height()) + self.block_size)
+                        else:
+                            pixmap_item.setY(y)
+                    block_detail.get("pixmap_items").append(pixmap_item)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.RightButton:
@@ -102,6 +140,7 @@ class ExtendMapScene(QGraphicsScene):
                     pixmap_setting = pixmaps_static.get(self.current_pixmap_name)
                     pixmap_type = pixmap_setting.get("pixmap_type")
                     pixmap: QPixmap = pixmap_setting.get("pixmap")
+                    print(block.get("x"), block.get("y"))
                     if pixmap_type == "floor":
                         pixmap_item.setX(block.get("x"))
                         pixmap_item.setY(block.get("y"))

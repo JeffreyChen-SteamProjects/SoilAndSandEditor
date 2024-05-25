@@ -22,4 +22,5 @@ english_word_dict = {
     "new_file_dialog_waring_tile": "Warning",
     "new_file_dialog_waring_input_value": "Please input value",
     "new_file_dialog_waring_x_not_equal_y": "x not equal y",
+    "new_file_dialog_waring_block_size_greater_than_xy": "block size greater than x or y",
 }
