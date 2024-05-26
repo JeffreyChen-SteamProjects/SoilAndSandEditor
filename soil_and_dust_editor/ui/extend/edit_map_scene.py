@@ -140,7 +140,6 @@ class ExtendMapScene(QGraphicsScene):
                     pixmap_setting = pixmaps_static.get(self.current_pixmap_name)
                     pixmap_type = pixmap_setting.get("pixmap_type")
                     pixmap: QPixmap = pixmap_setting.get("pixmap")
-                    print(block.get("x"), block.get("y"))
                     if pixmap_type == "floor":
                         pixmap_item.setX(block.get("x"))
                         pixmap_item.setY(block.get("y"))
