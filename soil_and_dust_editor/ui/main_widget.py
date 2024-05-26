@@ -106,7 +106,7 @@ class MainWidget(QWidget):
         self.tab_widget.addTab(
             self.plant_list_widget, language_wrapper.language_word_dict.get("tab_name_plant"))
         self.tab_widget.addTab(
-            self.furniture_list_widget, language_wrapper.language_word_dict.get("tab_name_furniture"))
+            self.furniture_list_widget, language_wrapper.language_word_dict.get("tab_name_building"))
         self.tab_widget.addTab(
             self.collision_list_widget, language_wrapper.language_word_dict.get("tab_name_collision"))
         self.tile_splitter = QSplitter()
@@ -120,7 +120,7 @@ class MainWidget(QWidget):
         load_and_update_pixmap(
             self.plant_list_widget, "assets/plant/*.png", "plant", tile_size)
         load_and_update_pixmap(
-            self.furniture_list_widget, "assets/furniture/*.png", "furniture", tile_size)
+            self.furniture_list_widget, "assets/building/*.png", "building", tile_size)
         load_and_update_pixmap(
             self.collision_list_widget, "assets/collision/*.png", "collision", tile_size)
         # Graphics view
@@ -145,8 +145,8 @@ class MainWidget(QWidget):
         clicked_item: QFileSystemModel = self.project_treeview.selectedIndexes()[0]
         file_info: QFileInfo = self.project_treeview.model().fileInfo(clicked_item)
         path = pathlib.Path(file_info.absoluteFilePath())
-        if path.is_file():
-            pass
+        if path.is_file() and path.suffix == ".json":
+            print(path)
 
     def list_widget_click(self, clicked_item: ExtendListWidgetItem) -> None:
         self.tile_name_label.setText(clicked_item.png_name)
