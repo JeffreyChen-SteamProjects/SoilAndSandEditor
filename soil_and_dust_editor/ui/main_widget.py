@@ -1,7 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from soil_and_dust_editor.scene.update_scene import renew_scene
+
+if TYPE_CHECKING:
+    from soil_and_dust_editor.ui.main_ui import SoilAndDustEditorMainUI
 import glob
 import pathlib
 from pathlib import Path
 
+from PySide6 import QtCore
 from PySide6.QtCore import QDir, Qt, QFileInfo, QSize
 from PySide6.QtGui import QPixmap
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
@@ -9,9 +18,11 @@ from PySide6.QtWidgets import QWidget, QGridLayout, QFileSystemModel, QTreeView,
     QSplitter, QListWidget, QTabWidget
 
 from soil_and_dust_editor.class_and_static.pixmap import pixmaps_static
+from soil_and_dust_editor.map.map_io import read_file
 from soil_and_dust_editor.ui.extend.edit_map_scene import ExtendMapScene
 from soil_and_dust_editor.ui.extend.extend_graphic_view import ExtendGraphicView
 from soil_and_dust_editor.ui.extend.extend_list_widget import ExtendListWidgetItem
+from soil_and_dust_editor.ui.extend.qthread_worker import QThreadWorker
 from soil_and_dust_editor.utils.multi_language.language_wrapper import language_wrapper
 
 
@@ -40,9 +51,11 @@ def load_and_update_pixmap(tile_list_widget: QListWidget, load_path: str, pixmap
 
 class MainWidget(QWidget):
 
-    def __init__(self, tile_size: int = 60, grid_max_size_x: int = 12000, grid_max_size_y: int = 12000):
+    def __init__(self, main_ui: SoilAndDustEditorMainUI, tile_size: int = 60, grid_max_size_x: int = 12000,
+                 grid_max_size_y: int = 12000):
         super().__init__()
         # Init var
+        self.main_ui = main_ui
         self.tile_size = tile_size
         self.grid_max_size_x = grid_max_size_x
         self.grid_max_size_y = grid_max_size_y
@@ -52,6 +65,9 @@ class MainWidget(QWidget):
         # Treeview
         self.project_treeview_model = QFileSystemModel()
         self.project_treeview_model.setRootPath(QDir.currentPath())
+        self.project_treeview_model.setNameFilters(["*.jsad"])
+        self.project_treeview_model.setFilter(QtCore.QDir.Filter.Files)
+        self.project_treeview_model.setNameFilterDisables(False)
         self.project_treeview = QTreeView()
         self.project_treeview.setModel(self.project_treeview_model)
         self.project_treeview.setRootIndex(
@@ -120,7 +136,7 @@ class MainWidget(QWidget):
         load_and_update_pixmap(
             self.plant_list_widget, "assets/plant/*.png", "plant", tile_size)
         load_and_update_pixmap(
-            self.furniture_list_widget, "assets/building/*.png", "building", tile_size)
+            self.furniture_list_widget, "assets/object/*.png", "object", tile_size)
         load_and_update_pixmap(
             self.collision_list_widget, "assets/collision/*.png", "collision", tile_size)
         # Graphics view
@@ -145,8 +161,11 @@ class MainWidget(QWidget):
         clicked_item: QFileSystemModel = self.project_treeview.selectedIndexes()[0]
         file_info: QFileInfo = self.project_treeview.model().fileInfo(clicked_item)
         path = pathlib.Path(file_info.absoluteFilePath())
-        if path.is_file() and path.suffix == ".json":
-            print(path)
+        if path.is_file() and path.suffix == ".jsad":
+            read_thread = QThreadWorker(read_file, str(path))
+            read_thread.signal.finished.connect(lambda: renew_scene(self.main_ui))
+            thread_pool = self.main_ui.thread_pool
+            thread_pool.start(read_thread)
 
     def list_widget_click(self, clicked_item: ExtendListWidgetItem) -> None:
         self.tile_name_label.setText(clicked_item.png_name)

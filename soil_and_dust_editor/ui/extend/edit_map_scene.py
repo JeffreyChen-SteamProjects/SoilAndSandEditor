@@ -5,7 +5,7 @@ from PySide6.QtGui import QPen, Qt, QPixmap
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
 
 from soil_and_dust_editor.class_and_static.layer import layer_order
-from soil_and_dust_editor.class_and_static.map import map_structure
+from soil_and_dust_editor.map.map import map_structure
 from soil_and_dust_editor.class_and_static.pixmap import pixmaps_static
 
 
@@ -97,11 +97,13 @@ class ExtendMapScene(QGraphicsScene):
             # grid_max_size x & y should be equal
             for x in range(0, self.grid_max_size_x + 1, self.block_size):
                 line_item = self.addLine(x, 0, x, self.grid_max_size_x - 1, QPen(Qt.GlobalColor.white))
+                line_item.setZValue(layer_order.get("grid_line"))
                 self.line_item.append(line_item)
                 x_count += 1
             for y in range(0, self.grid_max_size_y + 1, self.block_size):
                 if y <= self.grid_max_size_y:
                     line_item = self.addLine(0, y, self.grid_max_size_y - 1, y, QPen(Qt.GlobalColor.white))
+                    line_item.setZValue(layer_order.get("grid_line"))
                     self.line_item.append(line_item)
                     y_count += 1
             if not self.read_map:
@@ -145,7 +147,6 @@ class ExtendMapScene(QGraphicsScene):
                     layer_count = len(tiles)
                     tile = {
                         "pixmap_name": self.current_pixmap_name,
-                        "layer": layer_count,
                         "collision": False
                     }
                     block.get("pixmap_items").append(pixmap_item)
