@@ -1,6 +1,9 @@
+import os
 import sys
+from pathlib import Path
 
 from PySide6.QtCore import QCoreApplication, QTimer, QThreadPool
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QApplication
 from qt_material import QtStyleTools
 
@@ -16,6 +19,11 @@ class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
         self.new_file_dialog = None
         self.thread_pool = QThreadPool()
         self.setWindowTitle("SoilAndDust")
+        # Set Icon
+        self.icon_path = Path(os.getcwd() + "/je_driver_icon.ico")
+        self.icon = QIcon(str(self.icon_path))
+        if self.icon.isNull() is False:
+            self.setWindowIcon(self.icon)
         self.central_widget = MainWidget(self)
         self.map_edit_scene = self.central_widget.edit_map_scene
         self.graphics_view = self.central_widget.graphics_view
