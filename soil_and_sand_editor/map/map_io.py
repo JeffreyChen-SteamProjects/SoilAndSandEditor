@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QFileDialog
 
-from soil_and_dust_editor.map.map import map_structure
-from soil_and_dust_editor.scene.update_scene import renew_scene
-from soil_and_dust_editor.ui.extend.qthread_worker import QThreadWorker
-from soil_and_dust_editor.utils.json.json_file import read_json, write_json
+from soil_and_sand_editor.map.map import map_structure
+from soil_and_sand_editor.scene.update_scene import renew_scene
+from soil_and_sand_editor.ui.extend.qthread_worker import QThreadWorker
+from soil_and_sand_editor.utils.json.json_file import read_json, write_json
 
 if TYPE_CHECKING:
-    from soil_and_dust_editor.ui.main_ui import SoilAndDustEditorMainUI
+    from soil_and_sand_editor.ui.main_ui import SoilAndDustEditorMainUI
 
 
 def save_structure_file(main_ui: SoilAndDustEditorMainUI):

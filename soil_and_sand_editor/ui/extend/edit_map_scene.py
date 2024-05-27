@@ -4,9 +4,9 @@ from PySide6.QtCore import QRect, QPointF
 from PySide6.QtGui import QPen, Qt, QPixmap
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
 
-from soil_and_dust_editor.class_and_static.layer import layer_order
-from soil_and_dust_editor.map.map import map_structure
-from soil_and_dust_editor.class_and_static.pixmap import pixmaps_static
+from soil_and_sand_editor.class_and_static.layer import layer_order
+from soil_and_sand_editor.map.map import map_structure
+from soil_and_sand_editor.class_and_static.pixmap import pixmaps_static
 
 
 def build_block_structure(x_position: int, y_position: int, block_count: int, grid_size: int) -> dict:

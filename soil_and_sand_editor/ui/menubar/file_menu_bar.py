@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtGui import QAction
 
-from soil_and_dust_editor.map.map_io import save_structure_file, read_structure_file
-from soil_and_dust_editor.scene.update_scene import create_new_map_scene
-from soil_and_dust_editor.ui.dialog.new_file_dialog import NewFileDialog
-from soil_and_dust_editor.utils.multi_language.language_wrapper import language_wrapper
+from soil_and_sand_editor.map.map_io import save_structure_file, read_structure_file
+from soil_and_sand_editor.scene.update_scene import create_new_map_scene
+from soil_and_sand_editor.ui.dialog.new_file_dialog import NewFileDialog
+from soil_and_sand_editor.utils.multi_language.language_wrapper import language_wrapper
 
 if TYPE_CHECKING:
-    from soil_and_dust_editor.ui.main_ui import SoilAndDustEditorMainUI
+    from soil_and_sand_editor.ui.main_ui import SoilAndDustEditorMainUI
 
 
 def set_file_menu_bar(main_ui: SoilAndDustEditorMainUI):

@@ -1,1 +1,0 @@
-from soil_and_dust_editor.ui.main_ui import start_soil_and_dust_editor

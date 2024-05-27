@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtGui import QAction
 
-from soil_and_dust_editor.utils.multi_language.language_wrapper import language_wrapper
+from soil_and_sand_editor.utils.multi_language.language_wrapper import language_wrapper
 
 if TYPE_CHECKING:
-    from soil_and_dust_editor.ui.main_ui import SoilAndDustEditorMainUI
+    from soil_and_sand_editor.ui.main_ui import SoilAndDustEditorMainUI
 
 
 def set_grid_menu(main_ui: SoilAndDustEditorMainUI):

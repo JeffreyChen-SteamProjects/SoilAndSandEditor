@@ -17,28 +17,26 @@ def perlin(x, y, seed=0):
     xf, yf = x - xi, y - yi
 
     # Fade factors
-    u, v = fade(xf), fade(yf)
+    fade_u, fade_v = fade(xf), fade(yf)
 
     # Noise components
-    n00 = gradient(p[p[xi] + yi], xf, yf)
-    n01 = gradient(p[p[xi] + yi + 1], xf, yf - 1)
-    n11 = gradient(p[p[xi + 1] + yi + 1], xf - 1, yf - 1)
-    n10 = gradient(p[p[xi + 1] + yi], xf - 1, yf)
+    noise_00 = gradient(p[p[xi] + yi], xf, yf)
+    noise_01 = gradient(p[p[xi] + yi + 1], xf, yf - 1)
+    noise_11 = gradient(p[p[xi + 1] + yi + 1], xf - 1, yf - 1)
+    noise_10 = gradient(p[p[xi + 1] + yi], xf - 1, yf)
 
     # Combine noises
-    x1 = lerp(n00, n10, u)
-    x2 = lerp(n01, n11, u)
+    x1 = liner_interpolation(noise_00, noise_10, fade_u)
+    x2 = liner_interpolation(noise_01, noise_11, fade_u)
 
-    return lerp(x1, x2, v)
+    return liner_interpolation(x1, x2, fade_v)
 
 
-def lerp(a, b, x):
-    """Linear interpolation"""
-    return a + x * (b - a)
+def liner_interpolation(noise_1, noise_2, x1):
+    return noise_1 + x1 * (noise_2 - noise_1)
 
 
 def fade(t):
-    """6t^5 - 15t^4 + 10t^3"""
     return 6 * t ** 5 - 15 * t ** 4 + 10 * t ** 3
 
 
@@ -50,15 +48,20 @@ def gradient(h, x, y):
 
 
 # Create a grid of points
-lin = np.linspace(1, 2, 100, endpoint=False)
-y, x = np.meshgrid(lin, lin)
+lin_space = np.linspace(1, 3, 100, endpoint=False)
+y, x = np.meshgrid(lin_space, lin_space)
 
 # Generate Perlin noise
 noise = perlin(x, y, seed=random.randint(0, 99999999))
 
+noise = np.round(noise, 3)
 
 # Convert the noise array to a list of strings
+
+
 def row_to_string(row):
+    for val in row:
+        print(val)
     return "".join(["#" if val > 0 else "~" for val in row])
 
 

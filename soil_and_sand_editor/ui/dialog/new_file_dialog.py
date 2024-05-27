@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QBoxLayout, QLineEdit, QLabel, QPushButton
 
-from soil_and_dust_editor.utils.multi_language.language_wrapper import language_wrapper
+from soil_and_sand_editor.utils.multi_language.language_wrapper import language_wrapper
 
 
 class NewFileDialog(QWidget):

@@ -7,8 +7,8 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMainWindow, QApplication
 from qt_material import QtStyleTools
 
-from soil_and_dust_editor.ui.main_widget import MainWidget
-from soil_and_dust_editor.ui.menubar.menu_bar_builder import set_menu_bar
+from soil_and_sand_editor.ui.main_widget import MainWidget
+from soil_and_sand_editor.ui.menubar.menu_bar_builder import set_menu_bar
 
 
 class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
@@ -18,7 +18,7 @@ class SoilAndDustEditorMainUI(QMainWindow, QtStyleTools):
         # Var
         self.new_file_dialog = None
         self.thread_pool = QThreadPool()
-        self.setWindowTitle("SoilAndDust")
+        self.setWindowTitle("SoilAndSandEditor")
         # Set Icon
         self.icon_path = Path(os.getcwd() + "/je_driver_icon.ico")
         self.icon = QIcon(str(self.icon_path))

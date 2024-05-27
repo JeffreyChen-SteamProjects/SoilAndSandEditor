@@ -4,11 +4,11 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QMenuBar
 
-from soil_and_dust_editor.ui.menubar.file_menu_bar import set_file_menu_bar
-from soil_and_dust_editor.ui.menubar.grid_menu import set_grid_menu
+from soil_and_sand_editor.ui.menubar.file_menu_bar import set_file_menu_bar
+from soil_and_sand_editor.ui.menubar.grid_menu import set_grid_menu
 
 if TYPE_CHECKING:
-    from soil_and_dust_editor.ui.main_ui import SoilAndDustEditorMainUI
+    from soil_and_sand_editor.ui.main_ui import SoilAndDustEditorMainUI
 
 
 def set_menu_bar(main_ui: SoilAndDustEditorMainUI):

@@ -3,8 +3,8 @@ from pathlib import Path
 from threading import Lock
 from typing import Union
 
-from soil_and_dust_editor.utils.exception.exception_tags import cant_save_json_error, cant_find_json_error
-from soil_and_dust_editor.utils.exception.exceptions import SoilAndDustEditorJsonException
+from soil_and_sand_editor.utils.exception.exception_tags import cant_save_json_error, cant_find_json_error
+from soil_and_sand_editor.utils.exception.exceptions import SoilAndDustEditorJsonException
 
 _lock = Lock()
 

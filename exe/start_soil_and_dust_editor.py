@@ -1,3 +1,3 @@
-from soil_and_dust_editor import start_soil_and_dust_editor
+from soil_and_sand_editor import start_soil_and_dust_editor
 
 start_soil_and_dust_editor()

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from soil_and_dust_editor.scene.update_scene import renew_scene
+from soil_and_sand_editor.scene.update_scene import renew_scene
 
 if TYPE_CHECKING:
-    from soil_and_dust_editor.ui.main_ui import SoilAndDustEditorMainUI
+    from soil_and_sand_editor.ui.main_ui import SoilAndDustEditorMainUI
 import glob
 import pathlib
 from pathlib import Path
@@ -17,13 +17,13 @@ from PySide6.QtOpenGLWidgets import QOpenGLWidget
 from PySide6.QtWidgets import QWidget, QGridLayout, QFileSystemModel, QTreeView, QScrollArea, QLabel, QBoxLayout, \
     QSplitter, QListWidget, QTabWidget
 
-from soil_and_dust_editor.class_and_static.pixmap import pixmaps_static
-from soil_and_dust_editor.map.map_io import read_file
-from soil_and_dust_editor.ui.extend.edit_map_scene import ExtendMapScene
-from soil_and_dust_editor.ui.extend.extend_graphic_view import ExtendGraphicView
-from soil_and_dust_editor.ui.extend.extend_list_widget import ExtendListWidgetItem
-from soil_and_dust_editor.ui.extend.qthread_worker import QThreadWorker
-from soil_and_dust_editor.utils.multi_language.language_wrapper import language_wrapper
+from soil_and_sand_editor.class_and_static.pixmap import pixmaps_static
+from soil_and_sand_editor.map.map_io import read_file
+from soil_and_sand_editor.ui.extend.edit_map_scene import ExtendMapScene
+from soil_and_sand_editor.ui.extend.extend_graphic_view import ExtendGraphicView
+from soil_and_sand_editor.ui.extend.extend_list_widget import ExtendListWidgetItem
+from soil_and_sand_editor.ui.extend.qthread_worker import QThreadWorker
+from soil_and_sand_editor.utils.multi_language.language_wrapper import language_wrapper
 
 
 def load_and_update_pixmap(tile_list_widget: QListWidget, load_path: str, pixmap_type: str, tile_size: int):

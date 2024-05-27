@@ -4,12 +4,12 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtWidgets import QMessageBox
 
-from soil_and_dust_editor.map.map import map_structure
-from soil_and_dust_editor.ui.extend.edit_map_scene import ExtendMapScene
-from soil_and_dust_editor.utils.multi_language.language_wrapper import language_wrapper
+from soil_and_sand_editor.map.map import map_structure
+from soil_and_sand_editor.ui.extend.edit_map_scene import ExtendMapScene
+from soil_and_sand_editor.utils.multi_language.language_wrapper import language_wrapper
 
 if TYPE_CHECKING:
-    from soil_and_dust_editor.ui.main_ui import SoilAndDustEditorMainUI
+    from soil_and_sand_editor.ui.main_ui import SoilAndDustEditorMainUI
 
 
 def create_new_map_scene(
