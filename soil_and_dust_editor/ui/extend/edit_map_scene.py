@@ -4,7 +4,8 @@ from PySide6.QtCore import QRect, QPointF
 from PySide6.QtGui import QPen, Qt, QPixmap
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
 
-from soil_and_dust_editor.class_and_static.map import map_structure
+from soil_and_dust_editor.class_and_static.layer import layer_order
+from soil_and_dust_editor.map.map import map_structure
 from soil_and_dust_editor.class_and_static.pixmap import pixmaps_static
 
 
@@ -32,6 +33,27 @@ def detect_block(block_structure: dict, click_position: QPointF) -> Union[None, 
                 trigger_block = block_name
                 break
     return trigger_block
+
+
+def set_pixmap_item_position(pixmap_item: QGraphicsPixmapItem, pixmap_type: str,
+                             x: Union[int, float], y: Union[int, float], tile: dict,
+                             pixmap: QPixmap, block_size: int) -> None:
+    if pixmap_type == "floor":
+        pixmap_item.setX(x)
+        pixmap_item.setY(y)
+        pixmap_item.setZValue(layer_order.get("floor"))
+    elif pixmap_type == "collision":
+        pixmap_item.setX(x)
+        pixmap_item.setY(y)
+        pixmap_item.setZValue(layer_order.get("collision"))
+        tile.update({"collision": True})
+    else:
+        pixmap_item.setX(x)
+        if pixmap.height() > block_size:
+            pixmap_item.setY((y - pixmap.height()) + block_size)
+        else:
+            pixmap_item.setY(y)
+        pixmap_item.setZValue(layer_order.get("things"))
 
 
 class ExtendMapScene(QGraphicsScene):
@@ -75,11 +97,13 @@ class ExtendMapScene(QGraphicsScene):
             # grid_max_size x & y should be equal
             for x in range(0, self.grid_max_size_x + 1, self.block_size):
                 line_item = self.addLine(x, 0, x, self.grid_max_size_x - 1, QPen(Qt.GlobalColor.white))
+                line_item.setZValue(layer_order.get("grid_line"))
                 self.line_item.append(line_item)
                 x_count += 1
             for y in range(0, self.grid_max_size_y + 1, self.block_size):
                 if y <= self.grid_max_size_y:
                     line_item = self.addLine(0, y, self.grid_max_size_y - 1, y, QPen(Qt.GlobalColor.white))
+                    line_item.setZValue(layer_order.get("grid_line"))
                     self.line_item.append(line_item)
                     y_count += 1
             if not self.read_map:
@@ -102,19 +126,7 @@ class ExtendMapScene(QGraphicsScene):
                     pixmap_type = pixmap_setting.get("pixmap_type")
                     pixmap: QPixmap = pixmap_setting.get("pixmap")
                     pixmap_item = self.addPixmap(pixmap)
-                    if pixmap_type == "floor":
-                        pixmap_item.setX(x)
-                        pixmap_item.setY(y)
-                    elif pixmap_type == "collision":
-                        pixmap_item.setX(x)
-                        pixmap_item.setY(y)
-                        tile_detail.update({"collision": True})
-                    else:
-                        pixmap_item.setX(x)
-                        if pixmap.height() > self.block_size:
-                            pixmap_item.setY((y - pixmap.height()) + self.block_size)
-                        else:
-                            pixmap_item.setY(y)
+                    set_pixmap_item_position(pixmap_item, pixmap_type, x, y, tile_detail, pixmap, self.block_size)
                     block_detail.get("pixmap_items").append(pixmap_item)
 
     def mousePressEvent(self, event):
@@ -128,31 +140,20 @@ class ExtendMapScene(QGraphicsScene):
                 trigger_block = detect_block(map_structure, click_position)
                 if trigger_block:
                     block: dict = map_structure.get(trigger_block)
+                    x = block.get("x")
+                    y = block.get("y")
                     pixmap_item: QGraphicsPixmapItem = self.addPixmap(self.current_pixmap)
                     tiles = block.get("tiles")
                     layer_count = len(tiles)
                     tile = {
                         "pixmap_name": self.current_pixmap_name,
-                        "layer": layer_count,
                         "collision": False
                     }
                     block.get("pixmap_items").append(pixmap_item)
                     pixmap_setting = pixmaps_static.get(self.current_pixmap_name)
                     pixmap_type = pixmap_setting.get("pixmap_type")
                     pixmap: QPixmap = pixmap_setting.get("pixmap")
-                    if pixmap_type == "floor":
-                        pixmap_item.setX(block.get("x"))
-                        pixmap_item.setY(block.get("y"))
-                    elif pixmap_type == "collision":
-                        pixmap_item.setX(block.get("x"))
-                        pixmap_item.setY(block.get("y"))
-                        tile.update({"collision": True})
-                    else:
-                        pixmap_item.setX(block.get("x"))
-                        if pixmap.height() > self.block_size:
-                            pixmap_item.setY((block.get("y") - pixmap.height()) + self.block_size)
-                        else:
-                            pixmap_item.setY(block.get("y"))
+                    set_pixmap_item_position(pixmap_item, pixmap_type, x, y, tile, pixmap, self.block_size)
                     tiles.update({f"tile_{layer_count}": tile})
         super().mousePressEvent(event)
 

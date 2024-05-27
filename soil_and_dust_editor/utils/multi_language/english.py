@@ -1,9 +1,9 @@
 english_word_dict = {
     # Main page
-    "tab_name_tile": "tile",
-    "tab_name_plant": "plant",
-    "tab_name_building": "building",
-    "tab_name_collision": "collision",
+    "tab_name_tile": "Tile",
+    "tab_name_plant": "Plant",
+    "tab_name_building": "Object",
+    "tab_name_collision": "Collision",
     # Grid menu
     "grid_menu_label": "Gird menu",
     "grid_menu_close_grid": "Close gird",
