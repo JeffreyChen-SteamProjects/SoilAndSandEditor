@@ -13,6 +13,9 @@ english_word_dict = {
     "file_menu_new_file": "New file",
     "file_menu_save_file": "Save file",
     "file_menu_open_file": "Open file",
+    # Generate menu
+    "generate_menu_label": "Generate menu",
+    "generate_menu_generate_map": "Generate map",
     # New file dialog
     "new_file_dialog_window_tile": "New file",
     "new_file_dialog_x_label": "x size",

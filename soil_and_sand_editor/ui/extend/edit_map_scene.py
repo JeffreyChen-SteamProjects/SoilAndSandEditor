@@ -5,21 +5,8 @@ from PySide6.QtGui import QPen, Qt, QPixmap
 from PySide6.QtWidgets import QGraphicsScene, QGraphicsPixmapItem
 
 from soil_and_sand_editor.class_and_static.layer import layer_order
-from soil_and_sand_editor.map.map import map_structure
-from soil_and_sand_editor.class_and_static.pixmap import pixmaps_static
-
-
-def build_block_structure(x_position: int, y_position: int, block_count: int, grid_size: int) -> dict:
-    return {
-        f"block_{block_count}": {
-            "x": x_position,
-            "y": y_position,
-            "height": grid_size,
-            "width": grid_size,
-            "tiles": {},
-            "pixmap_items": [],
-        }
-    }
+from soil_and_sand_editor.map.map import map_structure, build_block_structure
+from soil_and_sand_editor.pixmap.pixmap import pixmaps_static, set_pixmap_item_position
 
 
 def detect_block(block_structure: dict, click_position: QPointF) -> Union[None, str]:
@@ -33,27 +20,6 @@ def detect_block(block_structure: dict, click_position: QPointF) -> Union[None, 
                 trigger_block = block_name
                 break
     return trigger_block
-
-
-def set_pixmap_item_position(pixmap_item: QGraphicsPixmapItem, pixmap_type: str,
-                             x: Union[int, float], y: Union[int, float], tile: dict,
-                             pixmap: QPixmap, block_size: int) -> None:
-    if pixmap_type == "floor":
-        pixmap_item.setX(x)
-        pixmap_item.setY(y)
-        pixmap_item.setZValue(layer_order.get("floor"))
-    elif pixmap_type == "collision":
-        pixmap_item.setX(x)
-        pixmap_item.setY(y)
-        pixmap_item.setZValue(layer_order.get("collision"))
-        tile.update({"collision": True})
-    else:
-        pixmap_item.setX(x)
-        if pixmap.height() > block_size:
-            pixmap_item.setY((y - pixmap.height()) + block_size)
-        else:
-            pixmap_item.setY(y)
-        pixmap_item.setZValue(layer_order.get("things"))
 
 
 class ExtendMapScene(QGraphicsScene):

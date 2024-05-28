@@ -17,7 +17,7 @@ from PySide6.QtOpenGLWidgets import QOpenGLWidget
 from PySide6.QtWidgets import QWidget, QGridLayout, QFileSystemModel, QTreeView, QScrollArea, QLabel, QBoxLayout, \
     QSplitter, QListWidget, QTabWidget
 
-from soil_and_sand_editor.class_and_static.pixmap import pixmaps_static
+from soil_and_sand_editor.pixmap.pixmap import pixmaps_static
 from soil_and_sand_editor.map.map_io import read_file
 from soil_and_sand_editor.ui.extend.edit_map_scene import ExtendMapScene
 from soil_and_sand_editor.ui.extend.extend_graphic_view import ExtendGraphicView

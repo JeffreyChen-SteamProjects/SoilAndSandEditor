@@ -13,6 +13,9 @@ traditional_chinese_word_dict = {
     "file_menu_new_file": "新檔案",
     "file_menu_save_file": "儲存檔案",
     "file_menu_open_file": "開啟檔案",
+    # Generate menu
+    "generate_menu_label": "生成選單",
+    "generate_menu_generate_map": "生成地圖",
     # New file dialog
     "new_file_dialog_window_tile": "新檔案",
     "new_file_dialog_x_label": "x 座標大小",

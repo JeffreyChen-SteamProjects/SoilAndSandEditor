@@ -41,32 +41,28 @@ def fade(t):
 
 
 def gradient(h, x, y):
-    """Convert h to the right gradient vector and return the dot product with (x, y)"""
     vectors = np.array([[0, 1], [0, -1], [1, 0], [-1, 0]])
     g = vectors[h % 4]
     return g[:, :, 0] * x + g[:, :, 1] * y
 
 
-# Create a grid of points
-lin_space = np.linspace(1, 3, 100, endpoint=False)
-y, x = np.meshgrid(lin_space, lin_space)
+def create_perlin_str(
+        start: int = 1, stop: int = 3, size: int = 200,
+        seed: int = random.randint(0, 99999999)) -> str:
+    lin_space = np.linspace(start, stop, size, endpoint=False)
+    y, x = np.meshgrid(lin_space, lin_space)
 
-# Generate Perlin noise
-noise = perlin(x, y, seed=random.randint(0, 99999999))
+    # Generate Perlin noise
+    noise = perlin(x, y, seed=seed)
 
-noise = np.round(noise, 3)
+    noise = np.round(noise, 3)
 
-# Convert the noise array to a list of strings
+    # Convert the noise array to a list of strings
+    def row_to_string(row):
+        return "".join(["#" if val > 0 else "~" for val in row])
 
+    noise_strings = [row_to_string(row) for row in noise]
 
-def row_to_string(row):
-    for val in row:
-        print(val)
-    return "".join(["#" if val > 0 else "~" for val in row])
+    build_string = "".join(noise_strings)
 
-
-noise_strings = [row_to_string(row) for row in noise]
-
-# Print the Perlin noise as a list of strings
-for row in noise_strings:
-    print(row)
+    return build_string
