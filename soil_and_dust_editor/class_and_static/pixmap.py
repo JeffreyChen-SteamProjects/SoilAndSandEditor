@@ -1,3 +1,0 @@
-pixmaps_static = {
-
-}
