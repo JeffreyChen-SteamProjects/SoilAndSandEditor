@@ -30,11 +30,13 @@ def generate_map(main_ui: SoilAndDustEditorMainUI):
     for block_name, block_detail in map_structure.items():
         if block_name not in ["grid_x", "grid_y", "block_size"]:
             if perlin_str[count] == "#":
-                pixmap_setting = pixmaps_static.get("grass_floor_1.png")
+                name = "grass_floor_1.png"
+                pixmap_setting = pixmaps_static.get(name)
                 pixmap = pixmap_setting.get("pixmap")
                 pixmap_type = pixmap_setting.get("pixmap_type")
             else:
-                pixmap_setting = pixmaps_static.get("soil_floor_1.png")
+                name = "soil_floor_1.png"
+                pixmap_setting: dict = pixmaps_static.get(name)
                 pixmap = pixmap_setting.get("pixmap")
                 pixmap_type = pixmap_setting.get("pixmap_type")
             x = block_detail.get("x")
@@ -43,7 +45,7 @@ def generate_map(main_ui: SoilAndDustEditorMainUI):
             layer_count = len(tiles)
             pixmap_item: QGraphicsPixmapItem = main_ui.map_edit_scene.addPixmap(pixmap)
             tile = {
-                "pixmap_name": "",
+                "pixmap_name": name,
                 "collision": False
             }
             block_detail.get("pixmap_items").append(pixmap_item)
