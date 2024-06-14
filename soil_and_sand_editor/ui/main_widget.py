@@ -44,8 +44,7 @@ def load_and_update_pixmap(tile_list_widget: QListWidget, load_path: str, pixmap
             width = pixmap.width()
         pixmaps_static.update({png_name: {
             "pixmap": pixmap, "pixmap_type": pixmap_type,
-            "height": height,
-            "width": width,
+            "height": height, "width": width,
         }})
 
 
