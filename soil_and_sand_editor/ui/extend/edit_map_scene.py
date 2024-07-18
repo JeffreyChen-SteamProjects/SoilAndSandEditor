@@ -47,8 +47,8 @@ class ExtendMapScene(QGraphicsScene):
         block_count = 0
         block_x_position = 0
         block_y_position = 0
-        for row in range(0, y_count, 1):
-            for column in range(0, x_count, 1):
+        for _ in range(0, y_count, 1):
+            for _ in range(0, x_count, 1):
                 map_structure.update(build_block_structure(
                     block_x_position, block_y_position, block_count, self.block_size))
                 block_x_position += self.block_size
@@ -101,7 +101,7 @@ class ExtendMapScene(QGraphicsScene):
             x = click_position.x()
             y = click_position.y()
             if x < 0 or y < 0:
-                pass
+                return
             else:
                 trigger_block = detect_block(map_structure, click_position)
                 if trigger_block:
@@ -129,7 +129,7 @@ class ExtendMapScene(QGraphicsScene):
             x = click_position.x()
             y = click_position.y()
             if x < 0 or y < 0:
-                pass
+                return 
             else:
                 trigger_block = detect_block(map_structure, click_position)
                 if trigger_block:

@@ -29,7 +29,7 @@ def create_new_map_scene(
                 language_wrapper.language_word_dict.get("new_file_dialog_waring_tile"),
                 language_wrapper.language_word_dict.get("new_file_dialog_waring_x_not_equal_y")
             )
-        elif block_size > grid_max_size_x or block_size > grid_max_size_x:
+        elif block_size > grid_max_size_x or block_size > grid_max_size_y:
             QMessageBox().warning(
                 main_ui,
                 language_wrapper.language_word_dict.get("new_file_dialog_waring_tile"),
