@@ -7,7 +7,7 @@ def perlin(x, y, seed=0):
     # Permutation table
     np.random.seed(seed)
     p = np.arange(256, dtype=int)
-    np.random.shuffle(p)
+    np.random.Generator.shuffle(p)
     p = np.stack([p, p]).flatten()
 
     # Coordinates of the top-left corner

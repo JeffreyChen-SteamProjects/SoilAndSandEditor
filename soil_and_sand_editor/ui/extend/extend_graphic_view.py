@@ -13,14 +13,8 @@ class ExtendGraphicView(QGraphicsView):
 
     def wheelEvent(self, event) -> None:
         if self.scene() and len(self.scene().items()) == 0:
-            pass
+            return 
         else:
-            current_position = event.position()
-            scene_position = self.mapToScene(QPoint(int(current_position.x()), int(current_position.y())))
-            view_width = self.viewport().width()
-            view_height = self.viewport().height()
-            horizon_scale = current_position.x() / view_width
-            vertical_scale = current_position.y() / view_height
             wheel_value = event.angleDelta().y()
             scale_factor = self.transform().m11()
 
